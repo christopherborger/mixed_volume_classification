@@ -12,9 +12,10 @@ def irreducible_subtriples_up_to_equivalence(container_triples,max_nr_2d):
         subtriples of a given list of container_triples that contain at most max_nr_2d-many
         2-dimensional polytopes
     """
-    # we add this so that we do not have to bother about degenerate input
+    
     print "irreducible_subtriples_up_to_equivalence"
     
+    # we add this so that we do not have to bother about degenerate input
     if len(container_triples)==0:
         return [] 
     
@@ -78,12 +79,12 @@ def irreducible_subtriples_up_to_equivalence(container_triples,max_nr_2d):
 
 def create_boxes(A,m1,m2):
     """
-        Input: A is two-dimensional in the two-dimensional spaec R^2 and is treated as A \times \{0 \} \subseteq R^3
+        Input: A is two-dimensional in the two-dimensional space R^2 and is treated as A \times \{0 \} \subseteq R^3
         
 
         The function generates a list of bounding boxes for a lattice polytope B, derived from conditions V(A,A,B)=m1 and V(B,B,A)<=m2. 
         
-        Without loss of generality it is assume that B contains (0,0,0) and lies above the height 0 plane. Each computed bounding box 
+        Without loss of generality it is assumed that B contains (0,0,0) and lies above the height 0 plane. Each computed bounding box 
         is supplied with a heighest point which is assumed to be in the polytope B. See Lemma 6.10 and Remark 6.11.
         
         The returned object is a list of pairs (Container for B, heighest point)
@@ -94,7 +95,7 @@ def create_boxes(A,m1,m2):
     boxes = []
     # That's the prescribed height of B
     w = m1/(2*A.volume())
-    # We make assumption on B, first we assume that B contains (0,0,0)
+    # We make assumptions on B, first we assume that B contains (0,0,0)
     # Then, up to shearing, we can assume that at height w B has a point whose first and second components are between 0 and w-1
     possible_ps = [vector([x,y]) for x in range(w) for y in range(w)]
     # We iterate over all such points (p1,p2,w) of B at height w
@@ -106,13 +107,13 @@ def create_boxes(A,m1,m2):
         trafo = matrix([[0,1/w],[-1/w,0]])
         #apply trafo to bounding_slice
         bounding_slice = Polyhedron([trafo*vector(v) for v in bounding_slice.vertices()])
-        #go through the different possible heigths
+        #go through the different possible heights
         for h in range(0,w+1):
             shift = 1/w*vector([p[0]*h,p[1]*h])
-            # append more points (tranlsate by shift vector, then embed into height h and append to the list of points)
+            # append more points (translate by shift vector, then embed into height h and append to the list of points)
             points=points+[list(vector(v)+shift)+[h] for v in bounding_slice.vertices_list()]
         container = Polyhedron(Polyhedron(points).integral_points())
-        # add pair (container, heightes point of B)
+        # add pair (container, heighest point of B)
         boxes.append([container,list(p)+[h]])
     return boxes
 
@@ -122,7 +123,7 @@ def pealed_off_container(A,B,volumeBound,mixedVolumeBound,fixed_polytope):
         so that V(fixed_polytopes,Q,Q) <= mixedVolumeBound is fulfilled. We work under the assumption that
         Q occurs in the sandwich (A,B) and the the relative volume of Q is at most volumeBound.
         
-        This function modfies B to a smaller polytopes by removing all vertices v of B such that 
+        This function modifies B to a smaller polytope by removing all vertices v of B such that 
         conv(A \cup \{v\}) is too large in the sense that Q = conv(A \cup \{v\}) does not satisfy 
         one of the conditions above. The returned object is such a smaller polytope. 
     """
@@ -176,7 +177,7 @@ def create_sandwich_factory_for_subpolytopes(initial_polytopes,container,m_v,m,f
         container - common outer part of the sandwich
 
         return a sandwich factory containing tuples A,B where A is in 
-        initial_polytopes and B is the respecive reduced version of the container
+        initial_polytopes and B is the respective reduced version of the container
     """
     sf = {}
     for S in initial_polytopes:
@@ -191,7 +192,7 @@ def subpolytopes_of_boxes_using_sandwiches(container,point,fixed_polytope,m,m_v,
         
         Input: 
         
-            fixed_polytopes - polytope that has been fixed
+            fixed_polytope - polytope that has been fixed
             container - bounding box in which to search for the second polytopes Q
             point - we search for Q with (0,0,0) and point in Q
             m - upper bound for V(Q,Q,fixed_polytope)
@@ -208,7 +209,7 @@ def subpolytopes_of_boxes_using_sandwiches(container,point,fixed_polytope,m,m_v,
     
     print "subpolytopes_of_boxes_using_sandwiches"
     
-    # Q is required to contain of this segment
+    # Q is required to contain this segment
     starting_segment = Polyhedron([[0,0,0],point])
 
     sf = create_sandwich_factory_for_subpolytopes([starting_segment],container,m_v,m,fixed_polytope)    
@@ -261,7 +262,7 @@ def subpolytopes_of_boxes_using_sandwiches_2d(container,point,fixed_polytope,m,m
         
         Input: 
         
-            fixed_polytopes - polytope that has been fixed
+            fixed_polytope - polytope that has been fixed
             container - bounding box in which to search for the second polytopes Q with dim(Q)=2
             point - we search for Q with (0,0,0) and point in Q
             m - upper bound for V(Q,Q,fixed_polytope)
@@ -328,10 +329,10 @@ def subpolytopes_of_boxes_using_sandwiches_2d(container,point,fixed_polytope,m,m
 
 def classify_two_2d(mv):
     """
-        Returns the list of maximal irreducible triple with at least two two-dimensional polytopes and mixed volume mv.
+        Returns the list of maximal irreducible triples with at least two two-dimensional polytopes and mixed volume mv.
 
     The search is based on Proposition 5.2, case (2)
-    The conditions V(P_1,P_1,P_2)<=mv and dim(P_1)=2 imply that relative volume of P_1 is at most mv
+    The conditions V(P_1,P_1,P_2)<=mv and dim(P_1)=2 imply that the relative volume of P_1 is at most mv
     NOTE: the notation in the paper and the choice of names in the code do not quite match.
     A in the code is P_1 in the paper
     B in the code is P_2 in the paper
@@ -358,7 +359,7 @@ def classify_two_2d(mv):
             # (m1 is a possible choice of V(A,A,B))
             for m1 in range(m,mv+1,m):
                 # recall that the boxes list contains not only boxes. Each box is supplied
-                # with point such that (0,0,0),point is assumed to be in the second polytope B
+                # with a point such that (0,0,0),point is assumed to be in the second polytope B
                 # This ensures that V(A,A,B)=m1 (equality, and not just upper bound!)
                 # mv**2 is the upper bound on V(B,B,A); see Proposition 5.2, case (2)
                 boxes = create_boxes(A,m1,mv**2)
@@ -445,4 +446,6 @@ def classify_one_2d(mv,only_b=False):
     triples = classify_maximal_triples_from_pairs(pairs_and_cayleys['tuples']+pairs_and_cayleys_ind1['tuples'],mv,2)
 
     return [t for t in triples if set([2,3])<= set([t[0].dim(), t[1].dim(), t[2].dim()])]
+ 
+
  
