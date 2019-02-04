@@ -7,7 +7,7 @@ load("polytopes.sage")
 def get_pair(t):
     """
         t is a triple (A,B,C).
-        If some two polytopes in the triple coincnide up to translation, we return the pair discarding the one which is repeated.
+        If some two polytopes in the triple coincide up to translation, we return the pair discarding the one which is repeated.
         Otherwise, we return None (nothing).
     """
     A = translative_normal_form(t[0])
@@ -112,7 +112,7 @@ def maximal_third_polytopes(A,B,mv,d_min):
         # so we convert from lhs*x <= rhs to rhs - lhs * x >=0.
         Cinequalities= [tuple([rhs]) + tuple(-vector(lhs))  for lhs, rhs in zip(measure.keys(),supFuncValuesVector)]
         Ccontainer=Polyhedron(ieqs=Cinequalities)
-        # NOTE: since (A,B) is irreducible, Container is always compact (see Theorem~?? TODO: add theorem number)
+        # NOTE: since (A,B) is irreducible, Container is always compact (see Proposition 2.5)
         # so, we could actually omit the test Container.is_compact()
         if Ccontainer.is_compact():
             C = Polyhedron(Ccontainer.integral_points())
@@ -139,7 +139,7 @@ def classify_maximal_triples_from_pairs(ab_pairs,mv,d_min):
         B = translative_normal_form(p[1])
 
         for C in maximal_third_polytopes(A,B,mv,d_min):
-            # making translative_normal_form(C) is again for the puprose of making the output nicer.
+            # forming translative_normal_form(C) is again for the purpose of making the output nicer.
             # we could have used just C.
             insert_up_to_equivalence(triples_and_cayleys,[A,B,translative_normal_form(C)])
 
@@ -164,7 +164,7 @@ def insert_up_to_equivalence(tuples_and_cayleys,new_tuple):
         new_tuple - the tuple to be inserted if there is not already an equivalent tuple
     """
     
-    # construct normal of the tuple using Cayley polytopes
+    # construct normal form of the tuple using Cayley polytopes
     anf_cayley = cayley_normal_form(new_tuple)
 
     # if tuple is not contained, yet..
@@ -200,7 +200,7 @@ def is_maximal_pair(p):
     """
         p - a pair of lattice polygons
         
-        determine wether a given pair of lattice polygons is saturated,
+        determine whether a given pair of lattice polygons is maximal,
         that is adding any point to any of the lattice polytopes 
         increases the mixed volume of the pair
     """
@@ -296,7 +296,7 @@ def minkowski_decompositions_from_file(fname):
 
 def myWeightedIntegerVectors(w,a):
     """
-        NOTE: previously, we expirienced buggs in WeightedIntegerVectors. For example, the result for
+        NOTE: previously, we experienced bugs in WeightedIntegerVectors. For example, the result for
          (6,[1,1,4,4]) contained vectors with non-integer components. Now, it seems to be okay, but we kept this version,
          which reimplements the function WeightedIntegerVectors.
         
@@ -309,3 +309,4 @@ def myWeightedIntegerVectors(w,a):
     P=Polyhedron(vertices=[ w*e/Factor for e,Factor in zip(matrix.identity(n).columns(),a)])
     # we return the list of integral points of this simplex
     return P.integral_points()
+
