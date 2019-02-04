@@ -38,7 +38,7 @@ def maximal_pairs_of_polygons_with_given_mixed_volume(mv):
         That's the main function for users of this 'module'. It returns the list of all maximal pairs of lattice polygons with mixed volume mv
     """
     update_dim_2_mixed_volume_database(mv)
-    # now, we can read the list polytopes from the corresponding file and return them
+    # now, we can read the list of pairs of polygons from the corresponding file and return them
     f=open(FILE_NAME_MV % (2,mv),'r')
     L=eval(f.read().replace('\n',' '))
     f.close()
@@ -125,6 +125,11 @@ def maximal_pairs_classification(max_mv):
         result[mv]=result[mv].values()
 
     return result
+    
+                
+
+
+
     
                 
 
