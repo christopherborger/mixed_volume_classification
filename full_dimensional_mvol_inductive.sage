@@ -33,13 +33,13 @@ def subtriples_up_to_equivalence(container_triples):
     for t in container_triples:
         myCayley=cayley_normal_form(t)
         myNumberOfPoints=total_number_of_points_in_triple(t)
-        # just in case, container_triples have some repititions, up to equivalence.
+        # just in case, container_triples have some repetitions, up to equivalence.
         if myCayley not in cayleys[myNumberOfPoints]:
             subtriples[myNumberOfPoints].append(t)
             cayleys[myNumberOfPoints].add(myCayley)
     
-    # Iteratively pealing of the vertices, we go through all subtriples.
-    # We go descedingly starting from the largest possible total numer of points.
+    # Iteratively pealing off the vertices, we go through all subtriples.
+    # We go descedingly starting from the largest possible total number of points.
     
     for p in range(b,12,-1):
         print "The case of the total number of points equal to",p
@@ -47,13 +47,13 @@ def subtriples_up_to_equivalence(container_triples):
             # go through the polytopes in the triple
             for i in range(0,3):
                 P = t[i]
-                # go through the vertices of the current polytope fromt the triple
+                # go through the vertices of the current polytope from the triple
                 for v in P.vertices():
                     # peal off this vertex like that:
                     L= list(P.integral_points())
                     w = vector(v)
                     L.remove(w)
-                    # this is the polytope with a vetex v pealed off
+                    # this is the polytope with a vertex v pealed off
                     Q = Polyhedron([list(l) for l in L])
                     # it might happen that Q.dim() <= 2. We do not deal with such cases here.
                     if Q.dim()>=3:
@@ -66,7 +66,7 @@ def subtriples_up_to_equivalence(container_triples):
                             subtriples[p-1].append(smallerTriple)
                             cayleys[p-1].add(cayley)
 
-    # Converting from the dictionarie of subtriples to a list
+    # Converting from the dictionary of subtriples to a list
     subtriples_list = []
     for k in subtriples.keys():
         for t in subtriples[k]:
@@ -86,7 +86,7 @@ def empty_subsimplices_up_to_symmetry(container):
     """
     print "empty_subsimplices_up_to_symmetry(container)"
 
-    # the normal forms that introduce will enable to check the above equivance.
+    # the normal forms that we introduce will enable to check the above equivalence.
     empty_subsimplices = []
     normal_forms = set([])
 
@@ -165,11 +165,11 @@ def append_sandwich_up_to_translation(sf,A,B):
 def create_translative_sandwich_factory(initial_polytopes,container,m):
     """
         initial_polytopes - list of initial values for A
-        container - presribed container for B
+        container - prescribed container for B
         m - upper bound on the volume of B
 
         return a sandwich factory containing tuples A,B where A is in the
-        list given by initial_polytopes and B is a suset of container such that the union of A with every point in B has volume at most m.
+        list given by initial_polytopes and B is a subset of container such that the union of A with every point in B has volume at most m.
     """
     sf = {}
     for A in initial_polytopes:
@@ -190,7 +190,7 @@ def subpolytopes_using_sandwiches(container,fixed_polytope,m):
     
     if are_homothetic(fixed_polytope,container):
         # We could do only the else-case, but we do the case distinction to optimize the performance.
-        # Think about the ase fixed_polytope=Delta_3 and container is a multiple of Delta_3.
+        # Think about the case fixed_polytope=Delta_3 and container is a multiple of Delta_3.
         # There can be many empty simplices inside the container. 
         # Since in the homothetic case, fixed_polytope and the container have the same GL_3(Z) symmetries up to translations.
         empty_simplices = empty_subsimplices_up_to_symmetry(container)
@@ -202,7 +202,7 @@ def subpolytopes_using_sandwiches(container,fixed_polytope,m):
 
     starting_simplices = []
     
-    # it does not harm to test if the empty simplices themselves actually satisfy the prescribed bounds 
+    # test if the empty simplices themselves actually satisfy the prescribed bounds 
     # on volume and mixed volume. 
     for E in empty_simplices:
         if Volume(E)<=m and mixed_volume([E,E,fixed_polytope])<=m:
@@ -227,8 +227,7 @@ def subpolytopes_using_sandwiches(container,fixed_polytope,m):
             # if it does not, we can reduce B
             reduction_of_B=Polyhedron([z for z in B.integral_points() if vector(z)!=vector(v)])
             
-            # TODO: here, blow_up_of_A instead of A ???
-            if mixed_volume([A,A,fixed_polytope]) <= m: 
+            if mixed_volume([blow_up_of_A,blow_up_of_A,fixed_polytope]) <= m: 
                 append_sandwich_up_to_translation(sf,blow_up_of_A,iterative_pealing_off(blow_up_of_A,B,m))
 
             append_sandwich_up_to_translation(sf,A,reduction_of_B)
@@ -250,8 +249,7 @@ def classify_equality_AB_pairs(mv):
        return all full-dimensional pairs A,B such that 
        V(A,A,B)=V(B,B,A)=mv holds. Note that this condition implies V(A)<=mv, V(B)<=mv
     """
-    # NOTE: this could have been unified by introducing a class for storing stuff up to a normal form,
-    # but we are busy are currently busy with other stuff :)
+    # NOTE: this could have been unified by introducing a class for storing stuff up to a normal form
     pairs_and_cayleys = {'tuples':[], 'cayleys':set([])}
     
     # we fix a possible volume for A (the first polytope)
@@ -278,10 +276,10 @@ def classify_equality_AB_pairs(mv):
 def classify_mv_inductive_approach(mv):
     """
         assuming that the files data/dim_3_mv_*.txt with *=1,...,mv-1
-        contains all full-dimensional maximal triples of mixed volumes from 1 to mv-1, repsectively,
+        contains all full-dimensional maximal triples of mixed volumes from 1 to mv-1, respectively,
         the function returns the list of all full-dimensional maximal triples A,B,C with V(A,B,C)=mv.
         
-        By Proposition *** TODO there are two cases to be enumerated: 
+        By Proposition 5.2 there are two cases to be enumerated: 
         a) for some (A,B) in the triple t one has V(A,A,B)<mv
         b) for all (A,B) in the triple t one has V(A,A,B)=mv (and, as a consequence also V(A)<=m for each A in the triple t)
         The function is built on distinction of these two cases. 
@@ -291,7 +289,7 @@ def classify_mv_inductive_approach(mv):
     
     fname='data/dim_3_mv_%d.txt'
 
-    # we load the maximal full-dimensional triples of lower mixed volume from respetive files
+    # we load the maximal full-dimensional triples of lower mixed volume from respective files
     maximal_triples = []
     for m in range(1,mv):
         maximal_triples = maximal_triples + polytope_tuples_from_file(fname % m)
@@ -300,7 +298,7 @@ def classify_mv_inductive_approach(mv):
     lower_mv_triples = subtriples_up_to_equivalence(maximal_triples)
     
     
-    # Pcik the triples of the form (A,A,B) up to ordering and produce the list of pairs (A,B) out of them
+    # Pick the triples of the form (A,A,B) up to ordering and produce the list of pairs (A,B) out of them
     inductive_pairs = []
     
     for t in lower_mv_triples:
@@ -313,7 +311,7 @@ def classify_mv_inductive_approach(mv):
     
     # non-inductive part ----------------------------------------------
     
-    # first we classfiy (A,B) with V(A,A,B)=V(A,B,B)=mv
+    # first we classifiy (A,B) with V(A,A,B)=V(A,B,B)=mv
     new_pairs = classify_equality_AB_pairs(mv)
 
     # A and B are given, C is to be found so that (A,B,C) is maximal
@@ -331,4 +329,6 @@ def classify_mv_inductive_approach(mv):
 
     # TODO: maybe, change the output format to have a list and not a nested list of two lists.
     return [inductive_maximal_triples,new_maximal_triples] 
+    
+
     
