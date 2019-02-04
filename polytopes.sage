@@ -95,7 +95,7 @@ def translative_normal_form(P):
 
 def are_homothetic(A,B):
     """
-        Testsing if A and B homothetical by bringing the vertex sets of A and B to a kind of homothetic normal form.
+        Testing if A and B are homothetic by bringing the vertex sets of A and B to a kind of homothetic normal form.
     """
     A = translative_normal_form(A)
     B = translative_normal_form(B)
@@ -175,6 +175,11 @@ def polytopes_from_file(fname):
     L=map(Polyhedron,L)
     f.close()
     return L
+
+
+
+
+
 
 
 
