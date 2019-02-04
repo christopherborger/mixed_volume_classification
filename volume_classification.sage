@@ -1,5 +1,4 @@
 load("polytopes.sage")
-#load("volume_classification.sage.py")
 
 import logging
 import os.path
@@ -8,7 +7,7 @@ import sys
 # Using the logging package one can conveniently turn off and on the auxiliary messages  
 
 logging.basicConfig(format='%(message)s',stream=sys.stdout,level=logging.INFO)
-# After modifing the level from, say, logging.INFO to logging.WARNING , the change will come into force only after _restarting the sage session_ and reloading
+# After modifying the level from, say, logging.INFO to logging.WARNING , the change will come into force only after _restarting the sage session_ and reloading
 
 # Sandwich is a pair of lattice polytopes A,B with A being a subset of B. 
 # The volume gap of a sandwich A,B is the difference Volume(B)-Volume(A).
@@ -19,7 +18,7 @@ FILE_NAME_VOLUME='data/dim_%d_volume_%d.txt'
 
 def prepare_sandwiches(d,volumeBound):
     for A in empty_simplices(d,volumeBound):
-        # first, we let B to be an homothetic copy of A as follows
+        # first, we let B be a homothetic copy of A as follows
         scalingFactor=(d+1)*(volumeBound/Volume(A)-1)+1
         B=scalingFactor*A+(1-scalingFactor)*A.center() # note: A.center() is the barycenter of the vertex set of A
         # the above polyhedron B is not necessarily integral, so we replace it by its integer hull:
@@ -54,7 +53,7 @@ def iterative_pealing_off(A,B,volumeBound):
     return B
 
 def layered_polytope_from_sandwich(A,B):
-    """ 3*B is embeded into height 0, two copies of 3*A are embedded into heights 1 and -1.
+    """ 3*B is embedded into height 0, two copies of 3*A are embedded into heights 1 and -1.
         Then, one generates a polytope based on these three layers at heights -1,0 and 1
     """ 
     middleLayer=[tuple(3*vector(v))+(0,) for v in B.vertices()]
@@ -78,7 +77,7 @@ def sandwich_normal_form(A,B):
 def append_sandwich(sf,A,B):
     """
         If no affine unimodular image of the sandwich (A,B) is in the sandwich factory sf,
-        the sanwich (A,B) is appended to sf.
+        the sandwich (A,B) is appended to sf.
     """
     vlGap=Volume(B)-Volume(A)
     SNF=sandwich_normal_form(A,B)
@@ -171,10 +170,13 @@ def lattice_polytopes_with_given_dimension_and_volume(d,vl):
     """
     # first, we update the database of lattice polytopes with a given volume
     update_volume_classification_database(d,vl)
-    # now, we can read the list polytopes from the corresponding file and return them
+    # now, we can read the list of polytopes from the corresponding file and return them
     f=open(FILE_NAME_VOLUME % (d,vl),'r')
     L=eval(f.read().replace('\n',' '))
     f.close()
     return [Polyhedron(P) for P in L]
+
+    
+
 
     
