@@ -1,5 +1,5 @@
 # mixed_volume_classification
-Sage code implementing the algorithms described in the paper "Classification of Triples of Lattice Polytopes with a given Mixed Volume" as well as corresponding enumeration data. This is joint work with Gennadiy Averkov and Ivan Soprunov.
+Sage code implementing the algorithms described in the paper [Classification of triples of lattice polytopes with a given mixed volume](https://arxiv.org/abs/1902.00891) as well as corresponding enumeration data. This is joint work with Gennadiy Averkov and Ivan Soprunov.
 
 ## Content:
 
